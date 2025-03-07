@@ -27,9 +27,6 @@ def answare_creator(row) :
     if lastIndexOfpTag != -1:
         substring = substring[:lastIndexOfpTag]
 
-    
-    
-
     lastIndexOfspanTag = substring.rfind("</span>")
     if lastIndexOfspanTag != -1:
         substring= substring[:lastIndexOfspanTag]
@@ -58,6 +55,13 @@ def answare_creator(row) :
     if len(substring) < 30 :
         substring = ""
     return substring
+def find_first_two_occurrences(string , word):
+    indices = []
+    index = string.find(word)
+    while index != -1:
+        indices.append(index)
+        index = string.find(word, index + 1)
+    return indices[:2]
 
 def find_last_two_occurrences(string, word):
     indices = []
@@ -92,6 +96,24 @@ def question_creator(row) :
         substring = substring[:-9] # delete last 9 characters
         substring = substring[7:] # delete first 7 characters
         substring = substring.replace("<", "") # delete every < characters
+
+    else :
+        #method 2 of finding the word of question
+        # our jey is #000000 occures right before the Word
+        lastIndexOfkeyTag = row.rfind("#007000")
+        if lastIndexOfkeyTag != -1:
+            substring = row[lastIndexOfkeyTag:]
+            substring = row.replace(row[:lastIndexOfkeyTag+2], "")
+
+        bTagIndices = find_first_two_occurrences(row,"b>")
+        if len(bTagIndices) == 2: 
+            substring = row[bTagIndices[0]:bTagIndices[1] + len("b>")]
+            print(substring)
+            substring = substring[:-4] # delete last 9 characters
+            substring = substring[2:] # delete first 7 characters
+            print(substring)
+            print("\n \n")
+
     return substring
 
 def get_file_path_from_user():
